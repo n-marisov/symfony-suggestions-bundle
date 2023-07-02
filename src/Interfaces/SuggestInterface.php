@@ -19,10 +19,9 @@ interface SuggestInterface
 
     /**
      * Возвращает свободные данные.
-     * @param callable|null $dataCreator
      * @return array|null
      */
-    public function suggestData( ?callable $dataCreator = null ):?array;
+    public function suggestData():?array;
 
 
 }
