@@ -32,7 +32,7 @@ class Suggestion implements JsonSerializable
         ];
 
         if(isset($this->dataCreator))
-            $data = $this->dataCreator->call($this->suggest);
+            $data = $this->dataCreator->call( $this->suggest, $this->suggest );
         else $data = $this->suggest->suggestData();
 
         if(!is_null( $data ))
