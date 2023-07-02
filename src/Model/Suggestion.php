@@ -2,6 +2,7 @@
 
 namespace Maris\Symfony\Suggestions\Model;
 
+use Closure;
 use JsonSerializable;
 use Maris\Symfony\Suggestions\Interfaces\SuggestInterface;
 
@@ -10,12 +11,16 @@ class Suggestion implements JsonSerializable
 
     protected SuggestInterface $suggest;
 
+    protected ?Closure $dataCreator;
+
     /**
      * @param SuggestInterface $suggest
+     * @param Closure|null $dataCreator
      */
-    public function __construct( SuggestInterface $suggest )
+    public function __construct( SuggestInterface $suggest , ?Closure $dataCreator = null )
     {
         $this->suggest = $suggest;
+        $this->dataCreator = $dataCreator;
     }
 
 
@@ -25,7 +30,12 @@ class Suggestion implements JsonSerializable
             "value" => $this->suggest->suggestTitle(),
             "unrestricted_value" => $this->suggest->suggestDescription()
         ];
-        if(!is_null( $data = $this->suggest->suggestData() ))
+
+        if(isset($this->dataCreator))
+            $data = $this->dataCreator->call($this->suggest);
+        else $data = $this->suggest->suggestData();
+
+        if(!is_null( $data ))
             $result["data"] = $data;
 
         return $result;
