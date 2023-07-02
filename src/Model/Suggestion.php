@@ -31,9 +31,10 @@ class Suggestion implements JsonSerializable
             "unrestricted_value" => $this->suggest->suggestDescription()
         ];
 
-        if(isset($this->dataCreator))
-            $data = $this->dataCreator->call( $this->suggest, $this->suggest );
+        if( isset($this->dataCreator) )
+            $data = ($this->dataCreator)($this->suggest);
         else $data = $this->suggest->suggestData();
+
 
         if(!is_null( $data ))
             $result["data"] = $data;
